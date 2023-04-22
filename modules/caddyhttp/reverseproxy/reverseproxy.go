@@ -981,6 +981,9 @@ func (h Handler) finalizeResponse(
 		}
 	}
 
+	// customization for instasafe web gateway
+	replaceLocationHeaderInResponse(&rw, req.Host)
+
 	copyHeader(rw.Header(), res.Header)
 
 	// The "Trailer" header isn't included in the Transport's response,
@@ -1033,6 +1036,36 @@ func (h Handler) finalizeResponse(
 	}
 
 	return nil
+}
+
+var pat *regexp.Regexp
+
+func replaceLocationHeaderInResponse(w *http.ResponseWriter, host string) {
+	if pat == nil {
+		pat = regexp.MustCompile(`(http|https)?://([^/]+)(/.*)?`)
+	}
+	//m.Log(zapcore.DebugLevel, "processing for location header")
+	locationHeaderValue := (*w).Header().Get("Location")
+	if len(locationHeaderValue) == 0 {
+		locationHeaderValue = (*w).Header().Get("location")
+		if len(locationHeaderValue) == 0 {
+			//m.Log(zapcore.DebugLevel, "no location header found")
+			return
+		}
+	}
+	//m.Log(zapcore.DebugLevel, "found location header: "+locationHeaderValue)
+
+	//var data = `https://google.com:123/value/create?very=true`
+	toBeReplacedValueInURL := ""
+	matches := pat.FindAllStringSubmatch(locationHeaderValue, -1) // matches is [][]string
+	for _, match := range matches {
+		fmt.Printf("full=%s scheme=%s, host=%s\n", match[0], match[1], match[2])
+		toBeReplacedValueInURL = match[2]
+	}
+	//m.Log(zapcore.DebugLevel, "toBeReplacedValueInURL==>"+toBeReplacedValueInURL+"::: host value: "+host)
+	loc := strings.Replace(locationHeaderValue, toBeReplacedValueInURL, host, -1)
+	//m.Log(zapcore.DebugLevel, "Setting final location value as => "+loc)
+	(*w).Header().Set("Location", loc)
 }
 
 // tryAgain takes the time that the handler was initially invoked,
