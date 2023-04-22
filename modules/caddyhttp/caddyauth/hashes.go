@@ -18,7 +18,7 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 
-	"github.com/caddyserver/caddy/v2"
+	"github.com/bhaswanth88/caddy/v2"
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/crypto/scrypt"
 )

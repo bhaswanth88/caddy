@@ -30,8 +30,8 @@ import (
 
 	"github.com/Masterminds/sprig/v3"
 	"github.com/alecthomas/chroma/v2/formatters/html"
-	"github.com/caddyserver/caddy/v2"
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
+	"github.com/bhaswanth88/caddy/v2"
+	"github.com/bhaswanth88/caddy/v2/modules/caddyhttp"
 	"github.com/dustin/go-humanize"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting/v2"

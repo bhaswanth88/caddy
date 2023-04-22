@@ -15,9 +15,9 @@
 package push
 
 import (
-	"github.com/caddyserver/caddy/v2/caddyconfig/httpcaddyfile"
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp/headers"
+	"github.com/bhaswanth88/caddy/v2/caddyconfig/httpcaddyfile"
+	"github.com/bhaswanth88/caddy/v2/modules/caddyhttp"
+	"github.com/bhaswanth88/caddy/v2/modules/caddyhttp/headers"
 )
 
 func init() {

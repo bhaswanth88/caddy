@@ -30,9 +30,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/caddyserver/caddy/v2"
-	"github.com/caddyserver/caddy/v2/modules/caddyevents"
-	"github.com/caddyserver/caddy/v2/modules/caddytls"
+	"github.com/bhaswanth88/caddy/v2"
+	"github.com/bhaswanth88/caddy/v2/modules/caddyevents"
+	"github.com/bhaswanth88/caddy/v2/modules/caddytls"
 	"github.com/caddyserver/certmagic"
 	"github.com/quic-go/quic-go"
 	"github.com/quic-go/quic-go/http3"

@@ -20,13 +20,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/caddyserver/caddy/v2"
-	"github.com/caddyserver/caddy/v2/caddyconfig"
-	"github.com/caddyserver/caddy/v2/caddyconfig/caddyfile"
-	"github.com/caddyserver/caddy/v2/caddyconfig/httpcaddyfile"
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp/headers"
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp/rewrite"
+	"github.com/bhaswanth88/caddy/v2"
+	"github.com/bhaswanth88/caddy/v2/caddyconfig"
+	"github.com/bhaswanth88/caddy/v2/caddyconfig/caddyfile"
+	"github.com/bhaswanth88/caddy/v2/caddyconfig/httpcaddyfile"
+	"github.com/bhaswanth88/caddy/v2/modules/caddyhttp"
+	"github.com/bhaswanth88/caddy/v2/modules/caddyhttp/headers"
+	"github.com/bhaswanth88/caddy/v2/modules/caddyhttp/rewrite"
 	"github.com/dustin/go-humanize"
 )
 

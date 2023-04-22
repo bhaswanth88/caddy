@@ -24,13 +24,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp/reverseproxy"
-	"github.com/caddyserver/caddy/v2/modules/caddytls"
+	"github.com/bhaswanth88/caddy/v2/modules/caddyhttp"
+	"github.com/bhaswanth88/caddy/v2/modules/caddyhttp/reverseproxy"
+	"github.com/bhaswanth88/caddy/v2/modules/caddytls"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/caddyserver/caddy/v2"
+	"github.com/bhaswanth88/caddy/v2"
 )
 
 var noopLogger = zap.NewNop()

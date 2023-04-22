@@ -3,7 +3,7 @@ package integration
 import (
 	"testing"
 
-	"github.com/caddyserver/caddy/v2/caddytest"
+	"github.com/bhaswanth88/caddy/v2/caddytest"
 )
 
 func TestDefaultSNI(t *testing.T) {

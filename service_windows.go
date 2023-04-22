@@ -18,7 +18,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/caddyserver/caddy/v2/notify"
+	"github.com/bhaswanth88/caddy/v2/notify"
 	"golang.org/x/sys/windows/svc"
 )
 

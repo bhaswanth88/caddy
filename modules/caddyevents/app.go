@@ -22,7 +22,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/caddyserver/caddy/v2"
+	"github.com/bhaswanth88/caddy/v2"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 )

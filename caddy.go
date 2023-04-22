@@ -833,7 +833,7 @@ func InstanceID() (uuid.UUID, error) {
 //
 // Set this variable during `go build` with `-ldflags`:
 //
-//	-ldflags '-X github.com/caddyserver/caddy/v2.CustomVersion=v2.6.2'
+//	-ldflags '-X github.com/bhaswanth88/caddy/v2.CustomVersion=v2.6.2'
 //
 // for example.
 var CustomVersion string
@@ -1003,4 +1003,4 @@ var errSameConfig = errors.New("config is unchanged")
 
 // ImportPath is the package import path for Caddy core.
 // This identifier may be removed in the future.
-const ImportPath = "github.com/caddyserver/caddy/v2"
+const ImportPath = "github.com/bhaswanth88/caddy/v2"

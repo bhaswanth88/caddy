@@ -19,9 +19,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/caddyserver/caddy/v2"
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp/headers"
+	"github.com/bhaswanth88/caddy/v2"
+	"github.com/bhaswanth88/caddy/v2/modules/caddyhttp"
+	"github.com/bhaswanth88/caddy/v2/modules/caddyhttp/headers"
 	"go.uber.org/zap"
 )
 

@@ -23,8 +23,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/caddyserver/caddy/v2"
-	caddycmd "github.com/caddyserver/caddy/v2/cmd"
+	"github.com/bhaswanth88/caddy/v2"
+	caddycmd "github.com/bhaswanth88/caddy/v2/cmd"
 	"github.com/smallstep/truststore"
 	"github.com/spf13/cobra"
 )
