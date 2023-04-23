@@ -1045,7 +1045,7 @@ func (h Handler) finalizeResponse(
 
 var pat *regexp.Regexp
 
-func (h Handler) replaceLocationHeaderInResponse(res *http.Response, host string) {
+func (h *Handler) replaceLocationHeaderInResponse(res *http.Response, host string) {
 	if pat == nil {
 		pat = regexp.MustCompile(`(http|https)?://([^/]+)(/.*)?`)
 	}
@@ -1073,7 +1073,7 @@ func (h Handler) replaceLocationHeaderInResponse(res *http.Response, host string
 	res.Header.Set("Location", loc)
 }
 
-func (h Handler) replaceLocationHeaderInResponseForDefault(w *http.ResponseWriter, host string) {
+func (h *Handler) replaceLocationHeaderInResponseForDefault(w *http.ResponseWriter, host string) {
 	if pat == nil {
 		pat = regexp.MustCompile(`(http|https)?://([^/]+)(/.*)?`)
 	}
