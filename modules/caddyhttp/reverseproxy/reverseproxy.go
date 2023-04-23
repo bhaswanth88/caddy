@@ -825,6 +825,7 @@ func (h *Handler) reverseProxy(rw http.ResponseWriter, req *http.Request, origRe
 	// safe, or if there is no error, emit fuller log entry
 	start := time.Now()
 	res, err := h.Transport.RoundTrip(req)
+
 	h.replaceLocationHeaderInResponse(res, req.Host)
 
 	duration := time.Since(start)
