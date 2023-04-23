@@ -486,6 +486,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyht
 		var done bool
 		done, proxyErr = h.proxyLoopIteration(clonedReq, r, w, proxyErr, start, retries, repl, reqHeader, reqHost, next)
 		if done {
+			h.logger.Debug("after proxyLoopIteration ")
 			break
 		}
 		retries++
@@ -505,6 +506,8 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyht
 func (h *Handler) proxyLoopIteration(r *http.Request, origReq *http.Request, w http.ResponseWriter, proxyErr error, start time.Time, retries int,
 	repl *caddy.Replacer, reqHeader http.Header, reqHost string, next caddyhttp.Handler) (bool, error) {
 	// get the updated list of upstreams
+	h.logger.Debug("[reverseproxy]proxyLoopIteration ")
+
 	upstreams := h.Upstreams
 	if h.DynamicUpstreams != nil {
 		dUpstreams, err := h.DynamicUpstreams.GetUpstreams(r)
@@ -782,6 +785,8 @@ func (h Handler) addForwardedHeaders(req *http.Request) error {
 // (This method is mostly the beginning of what was borrowed from the net/http/httputil package in the
 // Go standard library which was used as the foundation.)
 func (h *Handler) reverseProxy(rw http.ResponseWriter, req *http.Request, origReq *http.Request, repl *caddy.Replacer, di DialInfo, next caddyhttp.Handler) error {
+	h.logger.Debug("[reverseproxy]reverseProxy ")
+
 	_ = di.Upstream.Host.countRequest(1)
 	//nolint:errcheck
 	defer di.Upstream.Host.countRequest(-1)
@@ -826,7 +831,8 @@ func (h *Handler) reverseProxy(rw http.ResponseWriter, req *http.Request, origRe
 	start := time.Now()
 	res, err := h.Transport.RoundTrip(req)
 
-	h.replaceLocationHeaderInResponse(res, req.Host)
+	h.logger.Debug("About to replace headers for instasafe")
+	h.replaceLocationHeaderInResponse(res, origReq.Host)
 
 	duration := time.Since(start)
 	logger := h.logger.With(
