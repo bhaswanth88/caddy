@@ -981,8 +981,10 @@ func (h Handler) finalizeResponse(
 		}
 	}
 
+	h.logger.Debug("reverse proxy, reading host header==>" + req.Host)
+
 	// customization for instasafe web gateway
-	replaceLocationHeaderInResponse(&rw, req.Host)
+	h.replaceLocationHeaderInResponse(&rw, req.Host)
 
 	copyHeader(rw.Header(), res.Header)
 
@@ -1040,31 +1042,31 @@ func (h Handler) finalizeResponse(
 
 var pat *regexp.Regexp
 
-func replaceLocationHeaderInResponse(w *http.ResponseWriter, host string) {
+func (h Handler) replaceLocationHeaderInResponse(w *http.ResponseWriter, host string) {
 	if pat == nil {
 		pat = regexp.MustCompile(`(http|https)?://([^/]+)(/.*)?`)
 	}
-	//m.Log(zapcore.DebugLevel, "processing for location header")
+	h.logger.Debug("processing for location header")
 	locationHeaderValue := (*w).Header().Get("Location")
 	if len(locationHeaderValue) == 0 {
 		locationHeaderValue = (*w).Header().Get("location")
 		if len(locationHeaderValue) == 0 {
-			//m.Log(zapcore.DebugLevel, "no location header found")
+			h.logger.Debug("no location header found")
 			return
 		}
 	}
-	//m.Log(zapcore.DebugLevel, "found location header: "+locationHeaderValue)
+	h.logger.Debug("found location header: " + locationHeaderValue)
 
 	//var data = `https://google.com:123/value/create?very=true`
 	toBeReplacedValueInURL := ""
 	matches := pat.FindAllStringSubmatch(locationHeaderValue, -1) // matches is [][]string
 	for _, match := range matches {
-		fmt.Printf("full=%s scheme=%s, host=%s\n", match[0], match[1], match[2])
+		h.logger.Debug("full=" + match[0] + " scheme=" + match[1] + ", host=" + match[2])
 		toBeReplacedValueInURL = match[2]
 	}
-	//m.Log(zapcore.DebugLevel, "toBeReplacedValueInURL==>"+toBeReplacedValueInURL+"::: host value: "+host)
+	h.logger.Debug("toBeReplacedValueInURL==>" + toBeReplacedValueInURL + "::: host value: " + host)
 	loc := strings.Replace(locationHeaderValue, toBeReplacedValueInURL, host, -1)
-	//m.Log(zapcore.DebugLevel, "Setting final location value as => "+loc)
+	h.logger.Debug("Setting final location value as => " + loc)
 	(*w).Header().Set("Location", loc)
 }
 
