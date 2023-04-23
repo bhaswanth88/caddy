@@ -825,6 +825,8 @@ func (h *Handler) reverseProxy(rw http.ResponseWriter, req *http.Request, origRe
 	// safe, or if there is no error, emit fuller log entry
 	start := time.Now()
 	res, err := h.Transport.RoundTrip(req)
+	h.replaceLocationHeaderInResponse(res, req.Host)
+
 	duration := time.Since(start)
 	logger := h.logger.With(
 		zap.String("upstream", di.Upstream.String()),
@@ -984,7 +986,7 @@ func (h Handler) finalizeResponse(
 	h.logger.Debug("reverse proxy, reading host header==>" + req.Host)
 
 	// customization for instasafe web gateway
-	h.replaceLocationHeaderInResponse(&rw, req.Host)
+	h.replaceLocationHeaderInResponseForDefault(&rw, req.Host)
 
 	copyHeader(rw.Header(), res.Header)
 
@@ -1042,20 +1044,48 @@ func (h Handler) finalizeResponse(
 
 var pat *regexp.Regexp
 
-func (h Handler) replaceLocationHeaderInResponse(w *http.ResponseWriter, host string) {
+func (h Handler) replaceLocationHeaderInResponse(res *http.Response, host string) {
 	if pat == nil {
 		pat = regexp.MustCompile(`(http|https)?://([^/]+)(/.*)?`)
 	}
-	h.logger.Debug("processing for location header")
+	h.logger.Debug("[replaceLocationHeaderInResponse]processing for location header")
+	locationHeaderValue := res.Header.Get("Location")
+	if len(locationHeaderValue) == 0 {
+		locationHeaderValue = res.Header.Get("location")
+		if len(locationHeaderValue) == 0 {
+			h.logger.Debug("[replaceLocationHeaderInResponse]no location header found")
+			return
+		}
+	}
+	h.logger.Debug("[replaceLocationHeaderInResponse]found location header: " + locationHeaderValue)
+
+	//var data = `https://google.com:123/value/create?very=true`
+	toBeReplacedValueInURL := ""
+	matches := pat.FindAllStringSubmatch(locationHeaderValue, -1) // matches is [][]string
+	for _, match := range matches {
+		h.logger.Debug("full=" + match[0] + " scheme=" + match[1] + ", host=" + match[2])
+		toBeReplacedValueInURL = match[2]
+	}
+	h.logger.Debug("[replaceLocationHeaderInResponse]toBeReplacedValueInURL==>" + toBeReplacedValueInURL + "::: host value: " + host)
+	loc := strings.Replace(locationHeaderValue, toBeReplacedValueInURL, host, -1)
+	h.logger.Debug("[replaceLocationHeaderInResponse]Setting final location value as => " + loc)
+	res.Header.Set("Location", loc)
+}
+
+func (h Handler) replaceLocationHeaderInResponseForDefault(w *http.ResponseWriter, host string) {
+	if pat == nil {
+		pat = regexp.MustCompile(`(http|https)?://([^/]+)(/.*)?`)
+	}
+	h.logger.Debug("[replaceLocationHeaderInResponseForDefault]processing for location header")
 	locationHeaderValue := (*w).Header().Get("Location")
 	if len(locationHeaderValue) == 0 {
 		locationHeaderValue = (*w).Header().Get("location")
 		if len(locationHeaderValue) == 0 {
-			h.logger.Debug("no location header found")
+			h.logger.Debug("[replaceLocationHeaderInResponseForDefault]no location header found")
 			return
 		}
 	}
-	h.logger.Debug("found location header: " + locationHeaderValue)
+	h.logger.Debug("[replaceLocationHeaderInResponseForDefault]found location header: " + locationHeaderValue)
 
 	//var data = `https://google.com:123/value/create?very=true`
 	toBeReplacedValueInURL := ""
@@ -1066,7 +1096,7 @@ func (h Handler) replaceLocationHeaderInResponse(w *http.ResponseWriter, host st
 	}
 	h.logger.Debug("toBeReplacedValueInURL==>" + toBeReplacedValueInURL + "::: host value: " + host)
 	loc := strings.Replace(locationHeaderValue, toBeReplacedValueInURL, host, -1)
-	h.logger.Debug("Setting final location value as => " + loc)
+	h.logger.Debug("[replaceLocationHeaderInResponseForDefault]Setting final location value as => " + loc)
 	(*w).Header().Set("Location", loc)
 }
 
